@@ -340,7 +340,7 @@ async def analyze(request):
 
     if not dets:
         #no face
-        pass
+        age ='No Face!'
     
     else:
         #use the landmarks to crop the face using face processing helper script, this goes through each face one at a time
@@ -356,10 +356,10 @@ async def analyze(request):
             im = im[:, :, ::-1]
             #get age
             age = get_age(sess, im)
-            age = (round(age))
+            age = str(round(age))
             # print('Age: ', age)
     
-    return JSONResponse({'result': str(age)})
+    return JSONResponse({'result': age})
 
 
 if __name__ == '__main__':
