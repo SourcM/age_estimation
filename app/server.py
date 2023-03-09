@@ -20,13 +20,12 @@ from starlette.responses import HTMLResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
 
 import cv2
-import os
 import sys
 import numpy as np
 import cv2
 import onnxruntime as ort
 import face_processing_helpers as fph
-
+from pathlib import Path
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 path = Path(__file__).parent
