@@ -29,13 +29,16 @@ import face_processing_helpers as fph
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+path = Path(__file__).parent
+
+
 
 ###detector
 class CenterFace(object):
     def __init__(self, landmarks=True):
         self.landmarks = landmarks
         if self.landmarks:
-            self.net = cv2.dnn.readNetFromONNX('./centerface_640_640.onnx') #change this please
+            self.net = cv2.dnn.readNetFromONNX(path / 'app' / 'centerface_640_640.onnx') #change this please
         self.img_h_new, self.img_w_new, self.scale_h, self.scale_w = 0, 0, 0, 0
 
     def __call__(self, img, height, width, threshold=0.5):
@@ -285,8 +288,6 @@ landmarks = True
 centerface = CenterFace()
 
 
-path = Path(__file__).parent
-print('This is path ', path)
 
 app = Starlette()
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_headers=['X-Requested-With', 'Content-Type'])
@@ -305,7 +306,7 @@ async def download_file(url, dest):
 async def setup_learner():
     await download_file(export_file_url, path / export_file_name)
     try:
-        sess = get_model('./age1.onnx')
+        sess = get_model(path / 'app' / 'age1.onnx')
         return sess
     except RuntimeError as e:
         if len(e.args) > 0 and 'CPU-only machine' in e.args[0]:
