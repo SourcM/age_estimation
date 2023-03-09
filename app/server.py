@@ -306,7 +306,7 @@ async def download_file(url, dest):
 
 
 async def setup_learner():
-    await download_file(export_file_url, path / export_file_name)
+    # await download_file(export_file_url, path / export_file_name)
     try:
         sess = get_model(os.path.join(path2,'app','age1.onnx'))
         return sess
