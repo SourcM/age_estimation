@@ -361,7 +361,7 @@ async def analyze(request):
             age = 'I think your age is ' + str(round(age)) + '\nTry again with a better picture if you think otherwise.'
             # print('Age: ', age)
     except:
-        age = "I couldn't detect a face in that picture\nTry again'
+        age = "I couldn't detect a face in that picture\nTry again"
     
     return JSONResponse({age})
 
