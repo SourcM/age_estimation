@@ -343,11 +343,8 @@ async def analyze(request):
     #use centerface to get face bounding box and 5-keypoints
     dets, lms = centerface(frame, h, w, threshold=0.35)
 
-    if not dets:
-        #no face
-        age ='No Face!'
-    
-    else:
+    try:
+
         #use the landmarks to crop the face using face processing helper script, this goes through each face one at a time
         for kk, lm in enumerate(lms):
             lm_arr = []
@@ -363,6 +360,8 @@ async def analyze(request):
             age = get_age(sess, im)
             age = str(round(age))
             # print('Age: ', age)
+    except:
+        age = 'No Face Detected!'
     
     return JSONResponse({'result': age})
 
