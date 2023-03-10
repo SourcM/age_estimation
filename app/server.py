@@ -363,7 +363,7 @@ async def analyze(request):
     except:
         age_op = "I couldn't detect a face in that picture\nTry again"
     
-    return JSONResponse({age_op})
+    return JSONResponse({'result': age_op})
 
 
 if __name__ == '__main__':
