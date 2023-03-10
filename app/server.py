@@ -358,12 +358,12 @@ async def analyze(request):
             im = im[:, :, ::-1]
             #get age
             age = get_age(sess, im)
-            age = str(round(age))
+            age = 'I think your age is ' + str(round(age)) + '\nTry again with a better picture if you think otherwise.'
             # print('Age: ', age)
     except:
-        age = 'No Face Detected!'
+        age = "I couldn't detect a face in that picture\nTry again'
     
-    return JSONResponse({'result': age})
+    return JSONResponse({age})
 
 
 if __name__ == '__main__':
