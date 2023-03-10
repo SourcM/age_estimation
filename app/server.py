@@ -358,7 +358,7 @@ async def analyze(request):
             im = im[:, :, ::-1]
             #get age
             age = get_age(sess, im)
-            age_op = 'I think your age is ' + str(round(age)) + ', try again with a better picture if you think otherwise.'
+            age_op = 'I think your age is ' + str(round(age)) + '....try again with a better picture if you think otherwise.'
             # print('Age: ', age)
     except:
         age_op = "I couldn't detect a face in that picture try again"
