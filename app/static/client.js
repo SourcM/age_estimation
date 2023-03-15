@@ -31,7 +31,7 @@ function analyze() {
       var response = JSON.parse(e.target.responseText);
       el("result-label").innerHTML = `${response["result"]}`;
     }
-    el("analyze-button").innerHTML = "Analyze";
+    el("analyze-button").innerHTML = "Estimate";
   };
 
   var fileData = new FormData();
