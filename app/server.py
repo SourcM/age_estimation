@@ -267,6 +267,34 @@ def get_age(sess, img):
     oup = result[0].item()
     return oup
 
+def preproc(img):
+    # print(img)
+    img = img/255.0
+    # print(img)
+    img[:,:,0] = (img[:,:,0] - mean[0])/std[0]
+    img[:,:,1] = (img[:,:,1] - mean[1])/std[1]
+    img[:,:,2] = (img[:,:,2] - mean[2])/std[2]
+
+    # img  = np.array(normalized_img)
+    # print(img.shape)
+    img = img.transpose((2, 0, 1))
+    # print(img.shape)
+    im = img[np.newaxis, :, :, :]
+    # print(im.shape)
+    im = im.astype(np.float32)
+    return im
+
+###routine4
+def get_age_tta(sess, img):
+    #flip 
+    img2 = cv2.flip(img, 0)
+    ag1 = get_age(sess, img)
+    ag2 = get_age(sess, img2)
+
+    ag = (ag1 + ag2)/2
+    return ag
+
+
 ###routine2
 def get_model(model_file):
     ort.set_default_logger_severity(3)
@@ -354,10 +382,13 @@ async def analyze(request):
             coords5 = np.asarray(lm_arr)
             #this is the actual call to the alignment
             im = fph.crop_face(frame, coords5)
+            
             #conver to rgb
             im = im[:, :, ::-1]
+            
             #get age
-            age = get_age(sess, im)
+            # age = get_age(sess, im)
+            age = get_age_tta(sess, im)
             age_op = 'I think your age is ' + str(round(age)) + '....try again with a better picture if you think otherwise.'
             # print('Age: ', age)
     except:
