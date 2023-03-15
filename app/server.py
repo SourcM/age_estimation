@@ -227,8 +227,24 @@ class CenterFace(object):
 
         return keep
 
+#convert 4 channels to 3
+def remove_fourth_channel(img):
+    if len(img.shape) > 2 and img.shape[2] == 4:
+        #convert the image from RGBA2RGB
+        image = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
+    elif len(img.shape) < 2:
+        image = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
+    else:
+        image = img
+    return image
+
 ###routine 3
 def make_image_square(img):
+    #check image channels
+    if len(img.shape) > 2 and img.shape[2] == 3:
+        pass
+    else:
+        img = remove_fourth_channel(img)
     #get size
     height, width, channels = img.shape
    
@@ -371,7 +387,7 @@ async def analyze(request):
     #use centerface to get face bounding box and 5-keypoints
     dets, lms = centerface(frame, h, w, threshold=0.35)
 
-    try:
+    if len(dets) > 0:
 
         #use the landmarks to crop the face using face processing helper script, this goes through each face one at a time
         for kk, lm in enumerate(lms):
@@ -382,7 +398,7 @@ async def analyze(request):
             coords5 = np.asarray(lm_arr)
             #this is the actual call to the alignment
             im = fph.crop_face(frame, coords5)
-            
+            # print('croping done!')
             #conver to rgb
             im = im[:, :, ::-1]
             
@@ -391,7 +407,7 @@ async def analyze(request):
             age = get_age_tta(sess, im)
             age_op = 'I think your age is ' + str(round(age)) + '....try again with a better picture if you think otherwise.'
             # print('Age: ', age)
-    except:
+    else:
         age_op = "I couldn't detect a face in that picture try again"
     
     return JSONResponse({'result': age_op})
